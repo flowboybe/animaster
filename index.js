@@ -1,6 +1,7 @@
 function addListeners() {
     const animasterApi = animaster();
     let stopper;
+    let moveAndHideControl;
 
     document.getElementById('fadeInPlay')
         .addEventListener('click', function () {
@@ -29,7 +30,14 @@ function addListeners() {
     document.getElementById('moveAndHidePlay')
         .addEventListener('click', function () {
             const block = document.getElementById('moveAndHideBlock');
-            animasterApi.moveAndHide(block, 1000);
+            moveAndHideControl = animasterApi.moveAndHide(block, 3000);
+        });
+
+    document.getElementById('moveAndHideReset')
+        .addEventListener('click', function () {
+            if (moveAndHideControl) {
+                moveAndHideControl.reset();
+            }
         });
 
     document.getElementById('showAndHidePlay')
@@ -86,9 +94,17 @@ function animaster(){
             const moveDuration = duration * (2/5);
             const fadeDuration = duration * (3/5);
             this.move(element, moveDuration, { x: 100, y: 20 });
-            setTimeout(() => {
+            const timerId= setTimeout(() => {
                 this.fadeOut(element, fadeDuration);
             }, moveDuration);
+
+            return {
+                reset: () => {
+                    clearTimeout(timerId);
+                    resetMoveAndScale(element);
+                    resetFadeOut(element);
+                }
+            };
         },
         showAndHide (element, duration) {
             const fadeDuration = duration / 3;
