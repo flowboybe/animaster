@@ -147,7 +147,7 @@ function animaster() {
             const moveDuration = duration * (2 / 5);
             const fadeDuration = duration * (3 / 5);
             this.move(element, moveDuration, {x: 100, y: 20});
-            setTimeout(() => {
+            let timerId = setTimeout(() => {
                 this.fadeOut(element, fadeDuration);
             }, moveDuration);
 
@@ -165,8 +165,7 @@ function animaster() {
             setTimeout(() => {
                 this.fadeOut(element, fadeDuration);
             }, fadeDuration * 2);
-        }
-        ,
+        },
         heartBeating(element) {
             const beat = () => {
                 this.scale(element, 0.5, 1.4);
