@@ -24,39 +24,24 @@ function addListeners() {
             const block = document.getElementById('scaleBlock');
             animasterApi.scale(block, 1000, 1.25);
         });
-}
 
-/**
- * Блок плавно появляется из прозрачного.
- * @param element — HTMLElement, который надо анимировать
- * @param duration — Продолжительность анимации в миллисекундах
- */
-function fadeIn(element, duration) {
-    element.style.transitionDuration =  `${duration}ms`;
-    element.classList.remove('hide');
-    element.classList.add('show');
-}
+    document.getElementById('moveAndHidePlay')
+        .addEventListener('click', function () {
+            const block = document.getElementById('moveAndHideBlock');
+            animasterApi.moveAndHide(block, 1000);
+        });
 
-/**
- * Функция, передвигающая элемент
- * @param element — HTMLElement, который надо анимировать
- * @param duration — Продолжительность анимации в миллисекундах
- * @param translation — объект с полями x и y, обозначающими смещение блока
- */
-function move(element, duration, translation) {
-    element.style.transitionDuration = `${duration}ms`;
-    element.style.transform = getTransform(translation, null);
-}
+    document.getElementById('showAndHidePlay')
+        .addEventListener('click', function () {
+            const block = document.getElementById('showAndHideBlock');
+            animasterApi.showAndHide(block, 2000);
+        });
 
-/**
- * Функция, увеличивающая/уменьшающая элемент
- * @param element — HTMLElement, который надо анимировать
- * @param duration — Продолжительность анимации в миллисекундах
- * @param ratio — во сколько раз увеличить/уменьшить. Чтобы уменьшить, нужно передать значение меньше 1
- */
-function scale(element, duration, ratio) {
-    element.style.transitionDuration =  `${duration}ms`;
-    element.style.transform = getTransform(null, ratio);
+    document.getElementById('heartBeatingPlay')
+        .addEventListener('click', function () {
+            const block = document.getElementById('heartBeatingBlock');
+            animasterApi.heartBeating(block);
+        });
 }
 
 function getTransform(translation, ratio) {
@@ -89,6 +74,31 @@ function animaster(){
             element.style.transitionDuration =  `${duration}ms`;
             element.classList.remove('show');
             element.classList.add('hide');
+        },
+        moveAndHide (element, duration) {
+            const moveDuration = duration * (2/5);
+            const fadeDuration = duration * (3/5);
+            this.move(element, moveDuration, { x: 100, y: 20 });
+            setTimeout(() => {
+                this.fadeOut(element, fadeDuration);
+            }, moveDuration);
+        },
+        showAndHide (element, duration) {
+            const fadeDuration = duration / 3;
+            this.fadeIn(element, fadeDuration);
+            setTimeout(() => {
+                this.fadeOut(element, fadeDuration);
+            }, fadeDuration * 2);
+        },
+        heartBeating(element) {
+            const beat = () => {
+                this.scale(element, 0.5, 1.4);
+                setTimeout(() => {
+                    this.scale(element, 0.5, 1);
+                }, 500);
+            };
+            beat();
+            setInterval(beat, 1000);
         }
     }
 }
