@@ -62,35 +62,88 @@ function getTransform(translation, ratio) {
     return result.join(' ');
 }
 
-function animaster(){
+function animaster() {
     return {
-        move (element, duration, translation) {
+        _steps: [],
+        addMove(duration, translation) {
+            this._steps.push({
+                name: 'move',
+                duration: duration,
+                translation: translation
+            })
+            return this;
+        },
+        addScale(duration, ratio) {
+            this._steps.push({
+                name: 'scale',
+                duration: duration,
+                ratio: ratio
+            })
+            return this;
+        },
+        addFadeIn(duration) {
+            this._steps.push({
+                name: 'fadeIn',
+                duration: duration
+            })
+            return this;
+        },
+        addFadeOut(duration) {
+            this._steps.push({
+                name: 'fadeOut',
+                duration: duration
+            })
+            return this;
+        },
+        play(element) {
+            let delay = 0;
+            for (let anim of this._steps) {
+                setTimeout(() => {
+                    switch (anim.name) {
+                        case 'move':
+                            this.move(element, anim.duration, anim.translation);
+                            break;
+                        case 'scale':
+                            this.scale(element, anim.duration, anim.ratio);
+                            break;
+                        case 'fadeIn':
+                            this.fadeIn(element, anim.duration);
+                            break;
+                        case 'fadeOut':
+                            this.fadeOut(element, anim.duration);
+                            break;
+                    }
+                }, delay)
+                delay += anim.duration;
+            }
+        },
+        move(element, duration, translation) {
             element.style.transitionDuration = `${duration}ms`;
             element.style.transform = getTransform(translation, null);
         },
-        scale (element, duration, ratio) {
-            element.style.transitionDuration =  `${duration}ms`;
+        scale(element, duration, ratio) {
+            element.style.transitionDuration = `${duration}ms`;
             element.style.transform = getTransform(null, ratio);
         },
-        fadeIn (element, duration) {
-            element.style.transitionDuration =  `${duration}ms`;
+        fadeIn(element, duration) {
+            element.style.transitionDuration = `${duration}ms`;
             element.classList.remove('hide');
             element.classList.add('show');
         },
-        fadeOut (element, duration) {
-            element.style.transitionDuration =  `${duration}ms`;
+        fadeOut(element, duration) {
+            element.style.transitionDuration = `${duration}ms`;
             element.classList.remove('show');
             element.classList.add('hide');
         },
-        moveAndHide (element, duration) {
-            const moveDuration = duration * (2/5);
-            const fadeDuration = duration * (3/5);
-            this.move(element, moveDuration, { x: 100, y: 20 });
+        moveAndHide(element, duration) {
+            const moveDuration = duration * (2 / 5);
+            const fadeDuration = duration * (3 / 5);
+            this.move(element, moveDuration, {x: 100, y: 20});
             setTimeout(() => {
                 this.fadeOut(element, fadeDuration);
             }, moveDuration);
         },
-        showAndHide (element, duration) {
+        showAndHide(element, duration) {
             const fadeDuration = duration / 3;
             this.fadeIn(element, fadeDuration);
             setTimeout(() => {
@@ -107,7 +160,7 @@ function animaster(){
             beat();
             const pId = setInterval(beat, 1000);
             return {
-                stop (){
+                stop() {
                     clearInterval(pId);
                 }
             }
