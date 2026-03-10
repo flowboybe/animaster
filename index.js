@@ -116,20 +116,19 @@ function animaster(){
 
     function resetFadeIn(element) {
         element.style.transitionDuration = null;
-        element.classList().add('hide');
-        element.classList().remove('show')
-
+        element.classList.remove('show');
+        element.classList.add('hide');
     }
 
     function resetFadeOut(element) {
         element.style.transitionDuration = null;
-        element.classList().add('hide');
-        element.classList().remove('show')
+        element.classList.remove('hide');
+        element.classList.add('show');
     }
 
     function resetMoveAndScale(element) {
         element.style.transitionDuration = null;
-        element.style.transform = getTransform(null, null);
+        element.style.transform = null;
     }
 }
 
