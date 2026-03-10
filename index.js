@@ -101,6 +101,25 @@ function animaster(){
             setInterval(beat, 1000);
         }
     }
+
+    function resetFadeIn(element) {
+        element.style.transitionDuration = null;
+        element.classList().add('hide');
+        element.classList().remove('show')
+
+    }
+
+    function resetFadeOut(element) {
+        element.style.transitionDuration = null;
+        element.classList().add('hide');
+        element.classList().remove('show')
+    }
+
+    function resetMoveAndScale(element) {
+        element.style.transitionDuration = null;
+        element.style.transform = getTransform(null, null);
+    }
 }
+
 
 addListeners();
