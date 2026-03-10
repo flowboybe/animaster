@@ -1,5 +1,6 @@
 function addListeners() {
     const animasterApi = animaster();
+    let stopper;
 
     document.getElementById('fadeInPlay')
         .addEventListener('click', function () {
@@ -40,7 +41,13 @@ function addListeners() {
     document.getElementById('heartBeatingPlay')
         .addEventListener('click', function () {
             const block = document.getElementById('heartBeatingBlock');
-            animasterApi.heartBeating(block);
+            stopper = animasterApi.heartBeating(block);
+        });
+
+    document.getElementById('heartBeatingStop')
+        .addEventListener('click', function () {
+            if (stopper)
+                stopper.stop();
         });
 }
 
@@ -98,7 +105,12 @@ function animaster(){
                 }, 500);
             };
             beat();
-            setInterval(beat, 1000);
+            const pId = setInterval(beat, 1000);
+            return {
+                stop (){
+                    clearInterval(pId);
+                }
+            }
         }
     }
 
